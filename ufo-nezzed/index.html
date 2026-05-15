@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    
+    <title>PROJECT: OMNISIGHT // UAP TERMINAL</title>
+    <meta name="description" content="Interactive classified UAP (Unidentified Anomalous Phenomena) archive database. Explore declassified files, military reports, videos, and PDFs.">
+    <meta name="keywords" content="UAP, UFO, declassified, UAP archive, DVIDS, extraterrestrial, military reports, Project Omnisight, Nezzed">
+    <meta name="author" content="Nezzed.com">
+    <meta name="robots" content="index, follow, max-image-preview:large">
+    <link rel="canonical" href="https://tu-dominio.com/"> <meta property="og:title" content="PROJECT: OMNISIGHT // UAP TERMINAL">
+    <meta property="og:description" content="Access the interactive classified UAP archive database. Explore declassified files, videos, and documents.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://tu-dominio.com/"> <meta property="og:image" content="https://tu-dominio.com/og-image.jpg"> <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="PROJECT: OMNISIGHT // UAP TERMINAL">
+    <meta name="twitter:description" content="Access the interactive classified UAP archive database.">
+
+    <meta name="google-site-verification" content="XPXPn8vcLVxQwKLFsFvhPR2uw7_D4Nr4vgYysyRpbaI" />
+
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-8P3GJP35K7"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      // Configuración de GA4
+      gtag('config', 'G-8P3GJP35K7', {
+        'page_title': 'UAP Terminal Home',
+        'page_path': '/'
+      });
+    </script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        orbitron: ['Orbitron', 'sans-serif'],
+                        rajdhani: ['Rajdhani', 'sans-serif'],
+                    },
+                    colors: {
+                        cyber: {
+                            black: '#050507',
+                            dark: '#0a0a10',
+                            panel: '#111118',
+                            cyan: '#00f3ff',
+                            magenta: '#ff00ff',
+                            purple: '#8a2be2',
+                            warning: '#ffae00'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #050507;
+            color: #e0e0e0;
+            overflow-x: hidden;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        .scanlines {
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            background: linear-gradient(to bottom, rgba(255,255,255,0), rgba(255,255,255,0) 50%, rgba(0,0,0,0.2) 50%, rgba(0,0,0,0.2));
+            background-size: 100% 4px;
+            pointer-events: none;
+            z-index: 50;
+            opacity: 0.3;
+        }
+
+        .cyber-grid {
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            background-image: 
+                linear-gradient(rgba(0, 243, 255, 0.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 243, 255, 0.05) 1px, transparent 1px);
+            background-size: 40px 40px;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .neon-border-cyan {
+            border: 1px solid rgba(0, 243, 255, 0.3);
+            box-shadow: 0 0 10px rgba(0, 243, 255, 0.1), inset 0 0 10px rgba(0, 243, 255, 0.05);
+            transition: all 0.3s ease;
+        }
+        .neon-border-cyan:hover, .neon-border-cyan:focus-within {
+            border-color: #00f3ff;
+            box-shadow: 0 0 15px rgba(0, 243, 255, 0.4), inset 0 0 15px rgba(0, 243, 255, 0.2);
+        }
+        
+        .neon-border-magenta {
+            border: 1px solid rgba(255, 0, 255, 0.5);
+            box-shadow: 0 0 10px rgba(255, 0, 255, 0.2), inset 0 0 10px rgba(255, 0, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+        .neon-border-magenta:hover {
+            border-color: #ff00ff;
+            box-shadow: 0 0 20px rgba(255, 0, 255, 0.6), inset 0 0 15px rgba(255, 0, 255, 0.3);
+            background-color: rgba(255, 0, 255, 0.1);
+        }
+
+        .holographic-hover:hover {
+            transform: translateY(-5px);
+            background: linear-gradient(135deg, rgba(17, 17, 24, 0.9) 0%, rgba(0, 243, 255, 0.1) 100%);
+            border-color: #00f3ff;
+            box-shadow: 0 10px 20px rgba(0, 243, 255, 0.2);
+        }
+
+        .glitch { position: relative; }
+        .glitch::before, .glitch::after {
+            content: attr(data-text);
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%; opacity: 0.8;
+        }
+        .glitch::before {
+            left: 2px; text-shadow: -2px 0 #ff00ff; clip: rect(24px, 550px, 90px, 0);
+            animation: glitch-anim 3s infinite linear alternate-reverse;
+        }
+        .glitch::after {
+            left: -2px; text-shadow: -2px 0 #00f3ff; clip: rect(85px, 550px, 140px, 0);
+            animation: glitch-anim 2.5s infinite linear alternate-reverse;
+        }
+        @keyframes glitch-anim {
+            0% { clip: rect(10px, 9999px, 44px, 0); }
+            20% { clip: rect(80px, 9999px, 90px, 0); }
+            40% { clip: rect(20px, 9999px, 30px, 0); }
+            60% { clip: rect(60px, 9999px, 70px, 0); }
+            80% { clip: rect(15px, 9999px, 80px, 0); }
+            100% { clip: rect(90px, 9999px, 100px, 0); }
+        }
+
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #050507; }
+        ::-webkit-scrollbar-thumb { background: rgba(0, 243, 255, 0.5); border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #00f3ff; }
+
+        .loader-ring {
+            width: 50px; height: 50px;
+            border: 3px solid transparent;
+            border-top-color: #00f3ff;
+            border-bottom-color: #ff00ff;
+            border-radius: 50%;
+            animation: spin 1.5s linear infinite;
+        }
+        @keyframes spin { 100% { transform: rotate(360deg); } }
+    </style>
+</head>
+<body class="font-rajdhani antialiased relative">
+
+    <div class="cyber-grid"></div>
+    <div class="scanlines"></div>
+
+    <div id="loaderScreen" class="fixed inset-0 z-[100] bg-cyber-black flex flex-col items-center justify-center transition-opacity duration-500 px-4 text-center">
+        <div class="loader-ring mb-6"></div>
+        <h2 class="font-orbitron text-xl md:text-2xl text-cyber-cyan tracking-[0.2em] glitch" data-text="INICIANDO OMNISIGHT">INICIANDO OMNISIGHT</h2>
+        <p id="loaderStatus" class="mt-2 text-cyber-magenta animate-pulse font-mono text-xs md:text-sm">Sincronizando con base de datos del gobierno...</p>
+    </div>
+
+    <div class="relative z-20 bg-cyber-panel/80 backdrop-blur border-b border-cyber-cyan/30 py-2 px-4 flex flex-col sm:flex-row justify-between items-center gap-2 text-[10px] md:text-xs font-orbitron tracking-widest">
+        <div class="flex items-center gap-2">
+            <span class="text-gray-500">SYSTEM ARCHITECT:</span>
+            <a href="https://nezzed.com" target="_blank" rel="noopener noreferrer" class="text-cyber-cyan hover:text-white transition-colors">NEZZED.COM</a>
+        </div>
+        <div class="animate-pulse flex items-center gap-2">
+            <div class="w-2 h-2 rounded-full bg-green-500"></div> SECURE CONNECTION
+        </div>
+    </div>
+
+    <main id="appContainer" class="relative z-10 flex-1 container mx-auto px-4 sm:px-6 py-8 md:py-10 hidden opacity-0 transition-opacity duration-1000">
+        
+        <header class="text-center mb-10 relative">
+            <div class="inline-block relative w-full overflow-hidden py-2">
+                <h1 class="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-orbitron font-black text-transparent bg-clip-text bg-gradient-to-r from-cyber-cyan via-white to-cyber-magenta glitch tracking-widest mb-2" data-text="PROJECT: OMNISIGHT">
+                    PROJECT: OMNISIGHT
+                </h1>
+            </div>
+            <p class="text-sm sm:text-lg md:text-xl tracking-[0.2em] md:tracking-[0.3em] text-cyber-cyan opacity-80 mb-6 font-orbitron">UAP TERMINAL // RELEASE 001</p>
+            
+            <div class="flex flex-wrap justify-center gap-4">
+                <button onclick="fetchData(true)" class="group relative px-6 py-3 md:py-2 font-orbitron font-bold text-cyber-cyan bg-cyber-dark border border-cyber-cyan hover:bg-cyber-cyan hover:text-black transition-all duration-300 uppercase tracking-widest text-xs md:text-sm w-full sm:w-auto">
+                    <span class="relative z-10 flex items-center justify-center gap-2">
+                        <svg class="w-4 h-4 group-hover:animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
+                        Refresh Uplink
+                    </span>
+                </button>
+            </div>
+            
+            <div id="statusAlert" class="mt-4 text-xs md:text-sm font-mono p-3 md:p-4 bg-red-900/40 border border-red-500 text-red-400 hidden rounded-sm max-w-2xl mx-auto break-words"></div>
+        </header>
+
+        <section class="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4 mb-8">
+            <div class="bg-cyber-panel neon-border-cyan p-3 md:p-4 text-center rounded-sm flex flex-col justify-center">
+                <h3 class="text-gray-500 text-[9px] md:text-xs font-orbitron tracking-widest uppercase mb-1">Total Incidentes</h3>
+                <p id="statTotal" class="text-xl md:text-3xl font-bold text-white font-mono">0</p>
+            </div>
+            <div class="bg-cyber-panel neon-border-cyan p-3 md:p-4 text-center rounded-sm flex flex-col justify-center">
+                <h3 class="text-gray-500 text-[9px] md:text-xs font-orbitron tracking-widest uppercase mb-1">Último Evento</h3>
+                <p id="statNewest" class="text-sm md:text-xl font-bold text-cyber-cyan font-mono mt-1 md:mt-2">---</p>
+            </div>
+            <div class="bg-cyber-panel neon-border-cyan p-3 md:p-4 text-center rounded-sm flex flex-col justify-center">
+                <h3 class="text-gray-500 text-[9px] md:text-xs font-orbitron tracking-widest uppercase mb-1">Estado de Red</h3>
+                <p id="statNetwork" class="text-sm md:text-xl font-bold text-green-400 font-mono mt-1 md:mt-2">ONLINE</p>
+            </div>
+            <div class="bg-cyber-panel neon-border-cyan p-3 md:p-4 text-center rounded-sm flex flex-col justify-center">
+                <h3 class="text-gray-500 text-[9px] md:text-xs font-orbitron tracking-widest uppercase mb-1">Autorización</h3>
+                <p class="text-sm md:text-xl font-bold text-red-500 font-mono mt-1 md:mt-2 animate-pulse">SECRET</p>
+            </div>
+        </section>
+
+        <section class="bg-cyber-panel p-4 md:p-6 neon-border-cyan rounded-sm mb-8">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                <div class="w-full">
+                    <label for="filterText" class="block text-[10px] text-cyber-cyan font-orbitron tracking-wider mb-1 md:mb-2">BÚSQUEDA GLOBAL</label>
+                    <input type="text" id="filterText" placeholder="Ej. Orb, Pacific..." class="w-full bg-cyber-dark text-white border border-gray-700 p-3 md:p-2 font-mono text-sm focus:border-cyber-cyan transition-colors outline-none rounded-none">
+                </div>
+                <div class="w-full">
+                    <label for="filterDate" class="block text-[10px] text-cyber-cyan font-orbitron tracking-wider mb-1 md:mb-2">FECHA (YYYY-MM-DD)</label>
+                    <input type="text" id="filterDate" placeholder="Ej. 2014..." class="w-full bg-cyber-dark text-white border border-gray-700 p-3 md:p-2 font-mono text-sm focus:border-cyber-cyan transition-colors outline-none rounded-none">
+                </div>
+                <div class="w-full">
+                    <label for="filterLocation" class="block text-[10px] text-cyber-cyan font-orbitron tracking-wider mb-1 md:mb-2">UBICACIÓN</label>
+                    <input type="text" id="filterLocation" placeholder="Ej. Ocean..." class="w-full bg-cyber-dark text-white border border-gray-700 p-3 md:p-2 font-mono text-sm focus:border-cyber-cyan transition-colors outline-none rounded-none">
+                </div>
+                <div class="w-full">
+                    <label for="filterType" class="block text-[10px] text-cyber-cyan font-orbitron tracking-wider mb-1 md:mb-2">FENÓMENO</label>
+                    <select id="filterType" class="w-full bg-cyber-dark text-white border border-gray-700 p-3 md:p-2 font-mono text-sm focus:border-cyber-cyan transition-colors outline-none appearance-none rounded-none cursor-pointer">
+                        <option value="">TODOS</option>
+                    </select>
+                </div>
+            </div>
+        </section>
+
+        <section class="flex-1">
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-end mb-4 border-b border-gray-800 pb-2 gap-2">
+                <div id="resultsCount" class="text-cyber-magenta font-mono text-xs md:text-sm tracking-widest"></div>
+                <div class="text-[10px] text-gray-500 font-orbitron">PAGE <span id="currentPageInd" class="text-cyber-cyan">1</span></div>
+            </div>
+            
+            <div id="dataGrid" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+                </div>
+            
+            <div id="noResults" class="hidden text-center py-20 text-gray-500 font-orbitron text-lg md:text-xl px-4">
+                SIN RESULTADOS EN LA MATRIZ
+            </div>
+
+            <div id="paginationControls" class="flex flex-wrap justify-center items-center gap-2 md:gap-4 mt-10 mb-8 w-full">
+                </div>
+        </section>
+    </main>
+
+    <footer class="relative z-20 border-t border-cyber-cyan/20 bg-cyber-black py-8 mt-auto">
+        <div class="container mx-auto px-4 flex flex-col md:flex-row justify-between items-center gap-6 text-center md:text-left">
+            <div>
+                <h4 class="font-orbitron text-base md:text-lg text-white mb-1">DEVELOPED BY <a href="https://nezzed.com" target="_blank" rel="noopener noreferrer" class="text-cyber-cyan hover:text-cyber-magenta transition-colors">NEZZED.COM</a></h4>
+                <p class="text-[10px] md:text-xs font-mono text-gray-500">Frontend Cyberpunk Architect & Systems Developer.</p>
+            </div>
+            
+            <div class="w-full md:w-auto">
+                <a href="https://paypal.me/nezzedsolutions" target="_blank" rel="noopener noreferrer" class="flex justify-center items-center gap-2 px-6 py-4 md:py-3 bg-cyber-dark text-cyber-magenta font-orbitron text-xs md:text-sm font-bold tracking-widest uppercase neon-border-magenta group w-full md:w-auto">
+                    <svg class="w-5 h-5 group-hover:scale-110 transition-transform flex-shrink-0" fill="currentColor" viewBox="0 0 24 24"><path d="M7.076 21.337H2.47a.641.641 0 0 1-.633-.74L4.944.901C5.026.382 5.474 0 5.998 0h7.46c2.57 0 4.578.543 5.69 1.81 1.01 1.15 1.304 2.42 1.012 4.287-.023.143-.047.288-.077.437-.983 5.05-4.349 6.797-8.647 6.797h-2.19c-.524 0-.968.382-1.05.9l-1.12 7.106zM20.526 8.523c-.144-.816-.48-1.425-1.02-1.87-.585-.484-1.488-.705-2.618-.705H9.68a.64.64 0 0 0-.633.541l-1.92 12.193a.642.642 0 0 0 .633.74h3.69l.71-4.502a.64.64 0 0 1 .632-.54h1.36c3.486 0 6.22-1.42 7.006-5.498.05-.262.096-.53.136-.81l.056-.34c.039-.235.074-.474.103-.72.033-.274.053-.55.053-.836z"/></svg>
+                    <span>Support the Mainframe</span>
+                </a>
+            </div>
+        </div>
+    </footer>
+
+    <div id="detailModal" class="fixed inset-0 z-[60] bg-black/95 backdrop-blur-md hidden flex items-center justify-center p-2 sm:p-4 pt-16 sm:pt-4">
+        <div class="bg-cyber-panel neon-border-cyan w-full max-w-5xl max-h-[90vh] sm:max-h-[95vh] flex flex-col relative rounded-sm shadow-2xl">
+            <button onclick="closeModal()" class="absolute -top-12 sm:top-4 right-0 sm:right-4 text-cyber-magenta sm:text-gray-500 hover:text-cyber-magenta transition-colors z-50 bg-black/50 sm:bg-transparent rounded p-2 sm:p-1 border border-cyber-magenta/30 sm:border-none">
+                <span class="hidden sm:inline-block"><svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg></span>
+                <span class="sm:hidden font-orbitron tracking-widest text-xs flex items-center gap-1">CERRAR <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg></span>
+            </button>
+            
+            <div class="p-4 sm:p-6 border-b border-gray-800">
+                <h2 id="modalMainTitle" class="font-orbitron text-lg sm:text-2xl text-cyber-cyan tracking-widest uppercase pr-8 sm:pr-12 break-words leading-tight">EXTRACCIÓN DE DATOS</h2>
+                <p class="text-[10px] sm:text-xs font-mono text-gray-500 mt-2">DVIDS REF: <span id="modalId" class="text-cyber-magenta"></span></p>
+            </div>
+            
+            <div class="p-4 sm:p-6 overflow-y-auto custom-scrollbar flex-1 font-mono text-xs sm:text-sm">
+                <div id="modalMediaViewer" class="w-full mb-6 sm:mb-8 empty:hidden"></div>
+
+                <h3 class="text-cyber-cyan font-orbitron tracking-widest mb-3 sm:mb-4 border-b border-gray-800 pb-2 text-sm sm:text-base">METADATOS DEL EVENTO</h3>
+                <div id="modalContent" class="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const CSV_URL = 'https://www.war.gov/Portals/1/Interactive/2026/UFO/uap-release001.csv';
+        let allData = [];
+        let filteredData = [];
+        
+        // Configuración de Paginación
+        const ITEMS_PER_PAGE = 12;
+        let currentPage = 1;
+
+        const showLoader = (msg) => {
+            document.getElementById('loaderScreen').classList.remove('hidden');
+            document.getElementById('loaderScreen').classList.add('flex');
+            document.getElementById('appContainer').classList.add('hidden', 'opacity-0');
+            document.getElementById('loaderStatus').innerText = msg;
+        };
+
+        const hideLoader = () => {
+            document.getElementById('loaderScreen').classList.add('hidden');
+            document.getElementById('loaderScreen').classList.remove('flex');
+            const app = document.getElementById('appContainer');
+            app.classList.remove('hidden');
+            setTimeout(() => app.classList.remove('opacity-0'), 100);
+        };
+
+        // LÓGICA DE EVENTO GA4 AL ABRIR EXPEDIENTE
+        const trackViewEvent = (title, id) => {
+            if (typeof gtag !== 'undefined') {
+                gtag('event', 'view_uap_file', {
+                    'event_category': 'Engagement',
+                    'event_label': title,
+                    'file_id': id
+                });
+            }
+        };
+
+        const fetchData = (isManual = false) => {
+            if(isManual) showLoader("REESTABLECIENDO ENLACE...");
+            document.getElementById('statusAlert').classList.add('hidden');
+            document.getElementById('statNetwork').innerText = "FETCHING...";
+            document.getElementById('statNetwork').className = "text-sm md:text-xl font-bold text-cyber-warning font-mono mt-1 md:mt-2 animate-pulse";
+
+            Papa.parse(CSV_URL, {
+                download: true,
+                header: true,
+                skipEmptyLines: true,
+                complete: function(results) {
+                    if(results.errors.length > 0 && results.data.length === 0) {
+                        handleError(results.errors[0].message);
+                        return;
+                    }
+                    allData = results.data;
+                    filteredData = [...allData];
+                    
+                    if(allData.length > 0) {
+                        document.getElementById('statNetwork').innerText = "ONLINE";
+                        document.getElementById('statNetwork').className = "text-sm md:text-xl font-bold text-green-400 font-mono mt-1 md:mt-2";
+                        populateSelects();
+                        updateStats();
+                        currentPage = 1;
+                        renderGrid();
+                    } else {
+                        handleError("El archivo se leyó pero está vacío.");
+                    }
+                    hideLoader();
+                },
+                error: function(err) { handleError(err.message); }
+            });
+        };
+
+        const handleError = (msg) => {
+            console.error("Fetch Error:", msg);
+            document.getElementById('statusAlert').innerHTML = `
+                <strong>FALLO CRÍTICO DE CONEXIÓN</strong><br>
+                El servidor rechazó la lectura (Bloqueo CORS/Seguridad).<br>
+                <span class="text-[10px] md:text-xs text-gray-400 mt-2 block break-all">ERROR: ${msg}</span>
+            `;
+            document.getElementById('statusAlert').classList.remove('hidden');
+            document.getElementById('statNetwork').innerText = "BLOCKED";
+            document.getElementById('statNetwork').className = "text-sm md:text-xl font-bold text-red-500 font-mono mt-1 md:mt-2";
+            hideLoader();
+        };
+
+        const populateSelects = () => {
+            const types = new Set();
+            allData.forEach(row => {
+                if(row['Type'] && row['Type'].trim() !== '') types.add(row['Type'].trim());
+            });
+            const selectType = document.getElementById('filterType');
+            selectType.innerHTML = '<option value="">TODOS</option>';
+            Array.from(types).sort().forEach(t => {
+                selectType.innerHTML += `<option value="${t.toLowerCase()}">${t.toUpperCase()}</option>`;
+            });
+        };
+
+        const updateStats = () => {
+            document.getElementById('statTotal').innerText = filteredData.length;
+            let validDates = filteredData.map(row => new Date(row['Incident Date'])).filter(d => !isNaN(d));
+            if(validDates.length > 0) {
+                const maxDate = new Date(Math.max(...validDates));
+                document.getElementById('statNewest').innerText = maxDate.toISOString().split('T')[0];
+            } else {
+                document.getElementById('statNewest').innerText = "CLASIFICADA";
+            }
+        };
+
+        const generateCardThumbnail = (record) => {
+            const videoId = record['DVIDS Video ID'];
+            const link = record['PDF | Image Link'] || record['Modal Image'];
+            
+            if (videoId && videoId.trim() !== '') {
+                return `
+                    <div class="w-full h-32 md:h-40 bg-cyber-panel border border-gray-800 mb-4 flex flex-col items-center justify-center text-cyber-cyan group-hover:border-cyber-cyan transition-all relative overflow-hidden">
+                        <div class="absolute inset-0 opacity-20 pointer-events-none" style="background-image: linear-gradient(rgba(0, 243, 255, 0.4) 1px, transparent 1px), linear-gradient(90deg, rgba(0, 243, 255, 0.4) 1px, transparent 1px); background-size: 10px 10px;"></div>
+                        <svg class="w-8 h-8 mb-1 relative z-10 opacity-80 group-hover:opacity-100 group-hover:scale-110 transition-all" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                        <span class="text-[10px] font-orbitron tracking-widest relative z-10 text-cyber-cyan/70 group-hover:text-cyber-cyan">VIDEO ENCRIPTADO</span>
+                    </div>`;
+            }
+            if (link && link.trim() !== '') {
+                const url = link.trim();
+                const lowerUrl = url.toLowerCase();
+                if (lowerUrl.match(/\.(jpeg|jpg|gif|png|webp)$/)) {
+                    return `
+                        <div class="w-full h-32 md:h-40 border border-gray-800 mb-4 group-hover:border-cyber-cyan transition-all overflow-hidden relative bg-black">
+                            <div class="absolute inset-0 bg-cyber-cyan/20 mix-blend-overlay z-10 group-hover:opacity-0 transition-opacity duration-300 pointer-events-none"></div>
+                            <img src="${url}" alt="Preview" loading="lazy" class="w-full h-full object-cover grayscale opacity-60 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-500 transform group-hover:scale-105">
+                        </div>`;
+                } else if (lowerUrl.endsWith('.pdf')) {
+                    return `
+                        <div class="w-full h-32 md:h-40 bg-[#1a0f1c] border border-gray-800 mb-4 flex flex-col items-center justify-center text-cyber-magenta group-hover:border-cyber-magenta transition-all relative overflow-hidden">
+                            <div class="absolute inset-0 opacity-40 pointer-events-none" style="background: repeating-linear-gradient(to bottom, transparent, transparent 2px, rgba(0,0,0,0.8) 2px, rgba(0,0,0,0.8) 4px);"></div>
+                            <svg class="w-8 h-8 mb-1 relative z-10 opacity-80 group-hover:opacity-100 group-hover:-translate-y-1 transition-all" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                            <span class="text-[10px] font-orbitron tracking-widest relative z-10 text-cyber-magenta/70 group-hover:text-cyber-magenta">DOCUMENTO PDF</span>
+                        </div>`;
+                }
+            }
+            return ''; 
+        };
+
+        const renderGrid = () => {
+            const grid = document.getElementById('dataGrid');
+            const noResults = document.getElementById('noResults');
+            
+            grid.innerHTML = '';
+            
+            if(filteredData.length === 0) {
+                grid.classList.add('hidden');
+                document.getElementById('paginationControls').classList.add('hidden');
+                noResults.classList.remove('hidden');
+                document.getElementById('resultsCount').innerText = "0 REGISTROS";
+                document.getElementById('currentPageInd').innerText = "0";
+                return;
+            }
+
+            grid.classList.remove('hidden');
+            document.getElementById('paginationControls').classList.remove('hidden');
+            noResults.classList.add('hidden');
+
+            const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+            const endIndex = startIndex + ITEMS_PER_PAGE;
+            const pageData = filteredData.slice(startIndex, endIndex);
+
+            document.getElementById('resultsCount').innerText = `MOSTRANDO ${startIndex + 1}-${Math.min(endIndex, filteredData.length)} DE ${filteredData.length} REGISTROS`;
+            document.getElementById('currentPageInd').innerText = currentPage;
+
+            pageData.forEach((row, idx) => {
+                const globalIndex = startIndex + idx; 
+                
+                const title = row['Title'] || 'REGISTRO SIN TÍTULO';
+                const date = row['Incident Date'] || row['Release Date'] || 'N/A';
+                const type = row['Type'] || 'UNKNOWN';
+                const location = row['Incident Location'] || 'UBICACIÓN CLASIFICADA';
+                const agency = row['Agency'] || 'DEPARTMENT OF WAR';
+                const desc = row['Description Blurb'] || 'No hay descripción disponible.';
+
+                const thumbnailHtml = generateCardThumbnail(row);
+                const hasMedia = (row['DVIDS Video ID'] || row['PDF | Image Link'] || row['Modal Image']);
+                const mediaTag = hasMedia ? `<span class="bg-cyber-cyan/10 text-cyber-cyan px-2 py-1 text-[9px] font-bold rounded-sm border border-cyber-cyan/30 flex items-center gap-1"><svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg> <span class="hidden sm:inline">MEDIA</span></span>` : '';
+
+                const card = document.createElement('div');
+                card.className = "bg-cyber-dark p-4 md:p-6 neon-border-cyan cursor-pointer holographic-hover flex flex-col justify-between group relative overflow-hidden";
+                card.onclick = () => openModal(globalIndex);
+                
+                card.innerHTML = `
+                    <div class="relative z-10 flex-1 flex flex-col">
+                        <div class="flex justify-between items-start border-b border-gray-800 pb-3 mb-4 gap-2">
+                            <div class="flex flex-col">
+                                <span class="text-[9px] text-gray-600 font-orbitron uppercase">INCIDENT DATE</span>
+                                <span class="text-cyber-cyan font-mono text-xs md:text-sm">${date}</span>
+                            </div>
+                            <div class="flex flex-col items-end gap-1 text-right">
+                                <span class="bg-cyber-magenta/20 text-cyber-magenta px-2 py-1 text-[9px] font-bold uppercase rounded-sm border border-cyber-magenta/30 line-clamp-1">${type}</span>
+                                ${mediaTag}
+                            </div>
+                        </div>
+                        ${thumbnailHtml}
+                        <span class="text-[9px] text-gray-600 font-orbitron block mb-1 uppercase line-clamp-1">${location} // ${agency}</span>
+                        <h3 class="text-base sm:text-lg md:text-xl font-orbitron font-bold text-white mb-2 md:mb-3 group-hover:text-cyber-cyan transition-colors leading-tight line-clamp-2">${title}</h3>
+                        <p class="text-gray-400 text-xs md:text-sm font-mono line-clamp-3 leading-relaxed border-l-2 border-gray-700 pl-2 md:pl-3 flex-1">${desc}</p>
+                    </div>
+                    <div class="mt-4 pt-3 md:pt-4 border-t border-gray-800 flex justify-end relative z-10">
+                        <span class="text-[10px] md:text-[11px] text-cyber-cyan font-orbitron tracking-widest flex items-center gap-1 group-hover:animate-pulse">
+                            ABRIR EXPEDIENTE <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                        </span>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+
+            renderPaginationControls();
+        };
+
+        const renderPaginationControls = () => {
+            const totalPages = Math.ceil(filteredData.length / ITEMS_PER_PAGE);
+            const container = document.getElementById('paginationControls');
+            container.innerHTML = '';
+
+            if (totalPages <= 1) return;
+
+            const btnClass = "px-4 py-3 md:py-2 font-orbitron text-xs md:text-sm tracking-widest uppercase border transition-colors flex-1 sm:flex-none text-center";
+
+            const btnPrev = document.createElement('button');
+            btnPrev.className = `${btnClass} ${currentPage === 1 ? 'border-gray-800 text-gray-600 cursor-not-allowed' : 'border-cyber-cyan text-cyber-cyan hover:bg-cyber-cyan hover:text-black'}`;
+            btnPrev.innerText = '<< PREV';
+            btnPrev.disabled = currentPage === 1;
+            btnPrev.onclick = () => { if(currentPage > 1) { currentPage--; renderGrid(); window.scrollTo({top: document.getElementById('appContainer').offsetTop, behavior: 'smooth'}); } };
+            container.appendChild(btnPrev);
+
+            const pageInfo = document.createElement('span');
+            pageInfo.className = "font-mono text-white text-sm px-2 sm:px-4 order-first sm:order-none w-full sm:w-auto text-center mb-2 sm:mb-0";
+            pageInfo.innerText = `[ ${currentPage} / ${totalPages} ]`;
+            container.appendChild(pageInfo);
+
+            const btnNext = document.createElement('button');
+            btnNext.className = `${btnClass} ${currentPage === totalPages ? 'border-gray-800 text-gray-600 cursor-not-allowed' : 'border-cyber-cyan text-cyber-cyan hover:bg-cyber-cyan hover:text-black'}`;
+            btnNext.innerText = 'NEXT >>';
+            btnNext.disabled = currentPage === totalPages;
+            btnNext.onclick = () => { if(currentPage < totalPages) { currentPage++; renderGrid(); window.scrollTo({top: document.getElementById('appContainer').offsetTop, behavior: 'smooth'}); } };
+            container.appendChild(btnNext);
+        };
+
+        const applyFilters = () => {
+            const queryText = document.getElementById('filterText').value.toLowerCase();
+            const queryDate = document.getElementById('filterDate').value.toLowerCase();
+            const queryLoc = document.getElementById('filterLocation').value.toLowerCase();
+            const queryType = document.getElementById('filterType').value.toLowerCase();
+
+            filteredData = allData.filter(row => {
+                const fullString = Object.values(row).join(' ').toLowerCase();
+                const rowDate = (row['Incident Date'] || '').toLowerCase();
+                const rowLoc = (row['Incident Location'] || '').toLowerCase();
+                const rowType = (row['Type'] || '').toLowerCase();
+
+                return fullString.includes(queryText) &&
+                       rowDate.includes(queryDate) &&
+                       rowLoc.includes(queryLoc) &&
+                       (queryType === "" || rowType === queryType);
+            });
+
+            currentPage = 1; 
+            updateStats();
+            renderGrid();
+        };
+
+        ['filterText', 'filterDate', 'filterLocation', 'filterType'].forEach(id => {
+            document.getElementById(id).addEventListener('input', applyFilters);
+        });
+
+        const buildMediaEmbed = (record) => {
+            let html = '';
+            if (record['DVIDS Video ID'] && record['DVIDS Video ID'].trim() !== '') {
+                const videoId = record['DVIDS Video ID'].trim();
+                html += `<div class="relative w-full aspect-video bg-black rounded border border-cyber-cyan overflow-hidden mb-4 shadow-[0_0_15px_rgba(0,243,255,0.2)]">
+                            <iframe src="https://www.dvidshub.net/video/embed/${videoId}" width="100%" height="100%" frameborder="0" allowtransparency allowfullscreen></iframe>
+                        </div>`;
+            }
+
+            const link = record['PDF | Image Link'] || record['Modal Image'];
+            if (link && link.trim() !== '') {
+                const url = link.trim();
+                const lowerUrl = url.toLowerCase();
+                if (lowerUrl.endsWith('.pdf')) {
+                    html += `<div class="relative w-full h-[50vh] sm:h-[60vh] bg-cyber-black rounded border border-cyber-magenta overflow-hidden mb-4 flex flex-col">
+                                <div class="bg-gray-900 p-2 text-[10px] sm:text-xs font-mono text-center text-cyber-magenta border-b border-cyber-magenta">VISOR DE DOCUMENTOS CLASIFICADOS</div>
+                                <iframe src="${url}" class="w-full flex-1" type="application/pdf"></iframe>
+                                <div class="bg-gray-900 p-2 text-[10px] sm:text-xs text-center border-t border-gray-800">
+                                    <a href="${url}" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-white underline">Descargar / Abrir en pestaña nueva si es bloqueado</a>
+                                </div>
+                            </div>`;
+                } else if (lowerUrl.match(/\.(jpeg|jpg|gif|png|webp)$/)) {
+                    html += `<div class="relative w-full max-h-[50vh] sm:max-h-[60vh] bg-black rounded border border-cyber-cyan overflow-hidden mb-4 flex justify-center items-center p-2 shadow-[0_0_15px_rgba(0,243,255,0.2)]">
+                                <img src="${url}" alt="UAP Visual Data" class="max-w-full max-h-full object-contain">
+                            </div>`;
+                }
+            }
+            return html;
+        };
+
+        const openModal = (index) => {
+            const record = filteredData[index];
+            
+            // Disparar evento a Google Analytics (GA4)
+            trackViewEvent(record['Title'] || 'EXPEDIENTE SIN TITULO', record['DVIDS Video ID'] || record['Image VIRIN'] || 'UNKNOWN_ID');
+
+            document.getElementById('modalMainTitle').innerText = record['Title'] || 'EXPEDIENTE CLASIFICADO';
+            document.getElementById('modalId').innerText = record['DVIDS Video ID'] || record['Image VIRIN'] || `REF-UNK-${Math.floor(Math.random()*9999)}`;
+            document.getElementById('modalMediaViewer').innerHTML = buildMediaEmbed(record);
+
+            const content = document.getElementById('modalContent');
+            content.innerHTML = '';
+
+            for (const [key, value] of Object.entries(record)) {
+                let displayValue = value ? value.trim() : '';
+                if(!displayValue) displayValue = '<span class="text-gray-600">[NULL/REDACTED]</span>';
+                else if (displayValue.startsWith('http')) displayValue = `<a href="${displayValue}" target="_blank" rel="noopener noreferrer" class="text-cyber-cyan hover:text-cyber-magenta underline break-all">Enlace Externo ↗</a>`;
+
+                const colSpan = (key === 'Description Blurb') ? 'md:col-span-2' : '';
+                content.innerHTML += `
+                    <div class="bg-black/40 p-3 sm:p-4 border-l-2 border-gray-700 hover:border-cyber-cyan hover:bg-cyber-cyan/5 transition-colors ${colSpan}">
+                        <div class="text-gray-400 text-[9px] sm:text-[10px] font-orbitron tracking-widest mb-1 uppercase">${key}</div>
+                        <div class="text-gray-200 text-xs sm:text-sm leading-relaxed">${displayValue}</div>
+                    </div>`;
+            }
+            // Bloquear el scroll de la página de fondo en móviles
+            document.body.style.overflow = 'hidden';
+            document.getElementById('detailModal').classList.remove('hidden');
+        };
+
+        const closeModal = () => {
+            document.getElementById('detailModal').classList.add('hidden');
+            document.getElementById('modalMediaViewer').innerHTML = ''; 
+            // Devolver el scroll a la página
+            document.body.style.overflow = 'auto';
+        };
+
+        document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeModal(); });
+        document.getElementById('detailModal').addEventListener('click', (e) => {
+            if (e.target === document.getElementById('detailModal')) closeModal();
+        });
+
+        window.addEventListener('DOMContentLoaded', () => { fetchData(); });
+    </script>
+</body>
+</html>
