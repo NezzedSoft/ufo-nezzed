@@ -9,10 +9,15 @@
     <meta name="keywords" content="UAP, UFO, declassified, UAP archive, DVIDS, extraterrestrial, military reports, Project Omnisight, Nezzed">
     <meta name="author" content="Nezzed.com">
     <meta name="robots" content="index, follow, max-image-preview:large">
-    <link rel="canonical" href="https://ufo.nezzed.com/"> <meta property="og:title" content="PROJECT: OMNISIGHT // UAP TERMINAL">
+    <link rel="canonical" href="https://ufo.nezzed.com/"> 
+    
+    <meta property="og:title" content="PROJECT: OMNISIGHT // UAP TERMINAL">
     <meta property="og:description" content="Access the interactive classified UAP archive database. Explore declassified files, videos, and documents.">
     <meta property="og:type" content="website">
-    <meta property="og:url" content="https://ufo.nezzed.com/"> <meta property="og:image" content="https://ufo.nezzed.com/og-image.png"> <meta name="twitter:card" content="summary_large_image">
+    <meta property="og:url" content="https://ufo.nezzed.com/"> 
+    <meta property="og:image" content="https://ufo.nezzed.com/og-image.png"> 
+    
+    <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="PROJECT: OMNISIGHT // UAP TERMINAL">
     <meta name="twitter:description" content="Access the interactive classified UAP archive database.">
 
@@ -23,19 +28,18 @@
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
-      // Configuración de GA4
       gtag('config', 'G-8P3GJP35K7', {
         'page_title': 'UAP Terminal Home',
         'page_path': '/'
       });
     </script>
-    <script src="https://cdn.tailwindcss.com"></script>
     
+    <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet">
     
     <script>
         tailwind.config = {
@@ -46,15 +50,18 @@
                         rajdhani: ['Rajdhani', 'sans-serif'],
                     },
                     colors: {
-                        cyber: {
-                            black: '#050507',
-                            dark: '#0a0a10',
-                            panel: '#111118',
-                            cyan: '#00f3ff',
-                            magenta: '#ff00ff',
-                            purple: '#8a2be2',
-                            warning: '#ffae00'
+                        space: {
+                            base: '#020617', // Slate 950 muy oscuro
+                            panel: 'rgba(15, 23, 42, 0.75)', // Slate 900 con transparencia
+                            border: 'rgba(56, 189, 248, 0.3)', // Light Sky Blue
+                            accent: '#38bdf8', // Light Sky Blue
+                            accentHover: '#0ea5e9', // Sky Blue
+                            textMain: '#f8fafc',
+                            textMuted: '#94a3b8'
                         }
+                    },
+                    backgroundImage: {
+                        'starfield': "url('https://images.unsplash.com/photo-1506318137071-a8e063b4bec0?q=80&w=2093&auto=format&fit=crop')"
                     }
                 }
             }
@@ -63,237 +70,235 @@
 
     <style>
         body {
-            background-color: #050507;
-            color: #e0e0e0;
+            background-color: #020617;
+            color: #f8fafc;
             overflow-x: hidden;
             display: flex;
             flex-direction: column;
             min-height: 100vh;
         }
 
-        .scanlines {
+        /* Overlay oscuro para la imagen de fondo */
+        .bg-overlay {
             position: fixed;
-            top: 0; left: 0; width: 100vw; height: 100vh;
-            background: linear-gradient(to bottom, rgba(255,255,255,0), rgba(255,255,255,0) 50%, rgba(0,0,0,0.2) 50%, rgba(0,0,0,0.2));
-            background-size: 100% 4px;
+            inset: 0;
+            background-color: rgba(2, 6, 23, 0.85); /* Oscurece el espacio */
+            z-index: -1;
             pointer-events: none;
-            z-index: 50;
-            opacity: 0.3;
         }
 
-        .cyber-grid {
+        /* Grid de coordenadas estilo aeroespacial */
+        .telemetry-grid {
             position: fixed;
-            top: 0; left: 0; width: 100vw; height: 100vh;
+            inset: 0;
             background-image: 
-                linear-gradient(rgba(0, 243, 255, 0.05) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(0, 243, 255, 0.05) 1px, transparent 1px);
-            background-size: 40px 40px;
+                linear-gradient(rgba(56, 189, 248, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(56, 189, 248, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
             pointer-events: none;
             z-index: 0;
         }
 
-        .neon-border-cyan {
-            border: 1px solid rgba(0, 243, 255, 0.3);
-            box-shadow: 0 0 10px rgba(0, 243, 255, 0.1), inset 0 0 10px rgba(0, 243, 255, 0.05);
+        /* Estilo de Paneles NASA/SpaceX */
+        .space-panel {
+            background-color: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border: 1px solid rgba(56, 189, 248, 0.2);
+            box-shadow: inset 0 0 20px rgba(0,0,0,0.5), 0 4px 6px rgba(0,0,0,0.3);
+            border-radius: 4px;
             transition: all 0.3s ease;
         }
-        .neon-border-cyan:hover, .neon-border-cyan:focus-within {
-            border-color: #00f3ff;
-            box-shadow: 0 0 15px rgba(0, 243, 255, 0.4), inset 0 0 15px rgba(0, 243, 255, 0.2);
-        }
-        
-        .neon-border-magenta {
-            border: 1px solid rgba(255, 0, 255, 0.5);
-            box-shadow: 0 0 10px rgba(255, 0, 255, 0.2), inset 0 0 10px rgba(255, 0, 255, 0.1);
-            transition: all 0.3s ease;
-        }
-        .neon-border-magenta:hover {
-            border-color: #ff00ff;
-            box-shadow: 0 0 20px rgba(255, 0, 255, 0.6), inset 0 0 15px rgba(255, 0, 255, 0.3);
-            background-color: rgba(255, 0, 255, 0.1);
+
+        .space-panel-hover:hover {
+            border-color: rgba(56, 189, 248, 0.6);
+            box-shadow: inset 0 0 20px rgba(0,0,0,0.5), 0 0 15px rgba(56, 189, 248, 0.15);
+            transform: translateY(-2px);
         }
 
-        .holographic-hover:hover {
-            transform: translateY(-5px);
-            background: linear-gradient(135deg, rgba(17, 17, 24, 0.9) 0%, rgba(0, 243, 255, 0.1) 100%);
-            border-color: #00f3ff;
-            box-shadow: 0 10px 20px rgba(0, 243, 255, 0.2);
+        /* Inputs estilizados */
+        .space-input {
+            background-color: rgba(2, 6, 23, 0.8);
+            border: 1px solid rgba(56, 189, 248, 0.3);
+            color: #f8fafc;
+            transition: all 0.2s ease;
+        }
+        .space-input:focus {
+            border-color: #38bdf8;
+            outline: none;
+            box-shadow: 0 0 8px rgba(56, 189, 248, 0.2);
         }
 
-        .glitch { position: relative; }
-        .glitch::before, .glitch::after {
-            content: attr(data-text);
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%; opacity: 0.8;
-        }
-        .glitch::before {
-            left: 2px; text-shadow: -2px 0 #ff00ff; clip: rect(24px, 550px, 90px, 0);
-            animation: glitch-anim 3s infinite linear alternate-reverse;
-        }
-        .glitch::after {
-            left: -2px; text-shadow: -2px 0 #00f3ff; clip: rect(85px, 550px, 140px, 0);
-            animation: glitch-anim 2.5s infinite linear alternate-reverse;
-        }
-        @keyframes glitch-anim {
-            0% { clip: rect(10px, 9999px, 44px, 0); }
-            20% { clip: rect(80px, 9999px, 90px, 0); }
-            40% { clip: rect(20px, 9999px, 30px, 0); }
-            60% { clip: rect(60px, 9999px, 70px, 0); }
-            80% { clip: rect(15px, 9999px, 80px, 0); }
-            100% { clip: rect(90px, 9999px, 100px, 0); }
+        /* Efecto de texto brillante pero sutil */
+        .text-glow {
+            text-shadow: 0 0 10px rgba(56, 189, 248, 0.5);
         }
 
         ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-track { background: #050507; }
-        ::-webkit-scrollbar-thumb { background: rgba(0, 243, 255, 0.5); border-radius: 4px; }
-        ::-webkit-scrollbar-thumb:hover { background: #00f3ff; }
+        ::-webkit-scrollbar-track { background: #020617; }
+        ::-webkit-scrollbar-thumb { background: rgba(56, 189, 248, 0.4); border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #38bdf8; }
 
         .loader-ring {
             width: 50px; height: 50px;
             border: 3px solid transparent;
-            border-top-color: #00f3ff;
-            border-bottom-color: #ff00ff;
+            border-top-color: #38bdf8;
+            border-right-color: #f8fafc;
             border-radius: 50%;
-            animation: spin 1.5s linear infinite;
+            animation: spin 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
         }
         @keyframes spin { 100% { transform: rotate(360deg); } }
     </style>
 </head>
-<body class="font-rajdhani antialiased relative">
+<body class="font-rajdhani antialiased relative bg-starfield bg-cover bg-center bg-fixed">
 
-    <div class="cyber-grid"></div>
-    <div class="scanlines"></div>
+    <div class="bg-overlay"></div>
+    <div class="telemetry-grid"></div>
 
-    <div id="loaderScreen" class="fixed inset-0 z-[100] bg-cyber-black flex flex-col items-center justify-center transition-opacity duration-500 px-4 text-center">
+    <div id="loaderScreen" class="fixed inset-0 z-[100] bg-space-base flex flex-col items-center justify-center transition-opacity duration-500 px-4 text-center">
+        <img src="brand-nezzed.png" alt="Nezzed Logo" class="w-16 h-16 mb-8 animate-pulse opacity-80">
         <div class="loader-ring mb-6"></div>
-        <h2 class="font-orbitron text-xl md:text-2xl text-cyber-cyan tracking-[0.2em] glitch" data-text="INICIANDO OMNISIGHT">INICIANDO OMNISIGHT</h2>
-        <p id="loaderStatus" class="mt-2 text-cyber-magenta animate-pulse font-mono text-xs md:text-sm">Sincronizando con base de datos del gobierno...</p>
+        <h2 class="font-orbitron font-medium text-xl md:text-2xl text-space-accent tracking-[0.2em]">INITIALIZING OMNISIGHT</h2>
+        <p id="loaderStatus" class="mt-2 text-space-textMuted font-mono text-xs md:text-sm uppercase tracking-wider">Establishing secure uplink to central database...</p>
     </div>
 
-    <div class="relative z-20 bg-cyber-panel/80 backdrop-blur border-b border-cyber-cyan/30 py-2 px-4 flex flex-col sm:flex-row justify-between items-center gap-2 text-[10px] md:text-xs font-orbitron tracking-widest">
-        <div class="flex items-center gap-2">
-            <span class="text-gray-500">SYSTEM ARCHITECT:</span>
-            <a href="https://nezzed.com" target="_blank" rel="noopener noreferrer" class="text-cyber-cyan hover:text-white transition-colors">NEZZED.COM</a>
+    <div class="relative z-20 bg-space-base/90 backdrop-blur border-b border-space-border py-3 px-6 flex flex-col sm:flex-row justify-between items-center gap-4 text-[10px] md:text-xs font-orbitron tracking-widest uppercase">
+        <div class="flex items-center gap-3">
+            <a href="https://nezzed.com" target="_blank" rel="noopener noreferrer" class="flex items-center gap-2 group">
+                <img src="brand-nezzed.png" alt="Nezzed Icon" class="w-18 h-14 group-hover:scale-110 transition-transform">
+                <span class="text-space-textMuted group-hover:text-space-textMain transition-colors pt-1">Powered by <span class="text-space-accent font-bold">Nezzed</span></span>
+            </a>
         </div>
-        <div class="animate-pulse flex items-center gap-2">
-            <div class="w-2 h-2 rounded-full bg-green-500"></div> SECURE CONNECTION
+        <div class="flex items-center gap-4">
+            <span class="text-space-textMuted pt-1 hidden sm:block">SYSTEM ARCHITECTURE: CLASSIFIED</span>
+            <div class="flex items-center gap-2 pt-1">
+                <div class="w-2 h-2 rounded-full bg-green-500 animate-pulse shadow-[0_0_8px_rgba(34,197,94,0.6)]"></div> 
+                <span class="text-green-400">UPLINK SECURE</span>
+            </div>
         </div>
     </div>
 
     <main id="appContainer" class="relative z-10 flex-1 container mx-auto px-4 sm:px-6 py-8 md:py-10 hidden opacity-0 transition-opacity duration-1000">
         
-        <header class="text-center mb-10 relative">
-            <div class="inline-block relative w-full overflow-hidden py-2">
-                <h1 class="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-orbitron font-black text-transparent bg-clip-text bg-gradient-to-r from-cyber-cyan via-white to-cyber-magenta glitch tracking-widest mb-2" data-text="PROJECT: OMNISIGHT">
+        <header class="mb-12 flex flex-col md:flex-row justify-between items-end gap-6 border-b border-space-border pb-6">
+            <div>
+                <h1 class="text-3xl sm:text-4xl md:text-5xl font-orbitron font-bold text-space-textMain tracking-widest mb-1 text-glow">
                     PROJECT: OMNISIGHT
                 </h1>
+                <p class="text-sm md:text-base tracking-[0.2em] text-space-accent font-orbitron">ADVANCED UAP TERMINAL // REL.001</p>
             </div>
-            <p class="text-sm sm:text-lg md:text-xl tracking-[0.2em] md:tracking-[0.3em] text-cyber-cyan opacity-80 mb-6 font-orbitron">UAP TERMINAL // RELEASE 001</p>
             
-            <div class="flex flex-wrap justify-center gap-4">
-                <button onclick="fetchData(true)" class="group relative px-6 py-3 md:py-2 font-orbitron font-bold text-cyber-cyan bg-cyber-dark border border-cyber-cyan hover:bg-cyber-cyan hover:text-black transition-all duration-300 uppercase tracking-widest text-xs md:text-sm w-full sm:w-auto">
+            <div class="w-full md:w-auto">
+                <button onclick="fetchData(true)" class="group relative px-6 py-2 md:py-3 font-orbitron font-bold text-space-accent bg-space-base border border-space-accent hover:bg-space-accent hover:text-space-base transition-all duration-300 uppercase tracking-widest text-xs md:text-sm w-full sm:w-auto rounded-sm">
                     <span class="relative z-10 flex items-center justify-center gap-2">
                         <svg class="w-4 h-4 group-hover:animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
-                        Refresh Uplink
+                        Refresh Matrix
                     </span>
                 </button>
             </div>
-            
-            <div id="statusAlert" class="mt-4 text-xs md:text-sm font-mono p-3 md:p-4 bg-red-900/40 border border-red-500 text-red-400 hidden rounded-sm max-w-2xl mx-auto break-words"></div>
         </header>
 
-        <section class="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4 mb-8">
-            <div class="bg-cyber-panel neon-border-cyan p-3 md:p-4 text-center rounded-sm flex flex-col justify-center">
-                <h3 class="text-gray-500 text-[9px] md:text-xs font-orbitron tracking-widest uppercase mb-1">Total Incidentes</h3>
-                <p id="statTotal" class="text-xl md:text-3xl font-bold text-white font-mono">0</p>
-            </div>
-            <div class="bg-cyber-panel neon-border-cyan p-3 md:p-4 text-center rounded-sm flex flex-col justify-center">
-                <h3 class="text-gray-500 text-[9px] md:text-xs font-orbitron tracking-widest uppercase mb-1">Último Evento</h3>
-                <p id="statNewest" class="text-sm md:text-xl font-bold text-cyber-cyan font-mono mt-1 md:mt-2">---</p>
-            </div>
-            <div class="bg-cyber-panel neon-border-cyan p-3 md:p-4 text-center rounded-sm flex flex-col justify-center">
-                <h3 class="text-gray-500 text-[9px] md:text-xs font-orbitron tracking-widest uppercase mb-1">Estado de Red</h3>
-                <p id="statNetwork" class="text-sm md:text-xl font-bold text-green-400 font-mono mt-1 md:mt-2">ONLINE</p>
-            </div>
-            <div class="bg-cyber-panel neon-border-cyan p-3 md:p-4 text-center rounded-sm flex flex-col justify-center">
-                <h3 class="text-gray-500 text-[9px] md:text-xs font-orbitron tracking-widest uppercase mb-1">Autorización</h3>
-                <p class="text-sm md:text-xl font-bold text-red-500 font-mono mt-1 md:mt-2 animate-pulse">SECRET</p>
-            </div>
-        </section>
+        <div id="statusAlert" class="mb-6 text-xs md:text-sm font-mono p-3 bg-red-900/30 border border-red-500/50 text-red-400 hidden rounded-sm w-full break-words"></div>
 
-        <section class="bg-cyber-panel p-4 md:p-6 neon-border-cyan rounded-sm mb-8">
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                <div class="w-full">
-                    <label for="filterText" class="block text-[10px] text-cyber-cyan font-orbitron tracking-wider mb-1 md:mb-2">BÚSQUEDA GLOBAL</label>
-                    <input type="text" id="filterText" placeholder="Ej. Orb, Pacific..." class="w-full bg-cyber-dark text-white border border-gray-700 p-3 md:p-2 font-mono text-sm focus:border-cyber-cyan transition-colors outline-none rounded-none">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 mb-8">
+            
+            <section class="lg:col-span-3 grid grid-cols-2 gap-3">
+                <div class="space-panel p-3 text-center flex flex-col justify-center">
+                    <h3 class="text-space-textMuted text-[9px] md:text-xs font-orbitron tracking-widest uppercase mb-1">Total Records</h3>
+                    <p id="statTotal" class="text-xl md:text-2xl font-bold text-space-textMain font-mono">0</p>
                 </div>
-                <div class="w-full">
-                    <label for="filterDate" class="block text-[10px] text-cyber-cyan font-orbitron tracking-wider mb-1 md:mb-2">FECHA (YYYY-MM-DD)</label>
-                    <input type="text" id="filterDate" placeholder="Ej. 2014..." class="w-full bg-cyber-dark text-white border border-gray-700 p-3 md:p-2 font-mono text-sm focus:border-cyber-cyan transition-colors outline-none rounded-none">
+                <div class="space-panel p-3 text-center flex flex-col justify-center">
+                    <h3 class="text-space-textMuted text-[9px] md:text-xs font-orbitron tracking-widest uppercase mb-1">Latest Entry</h3>
+                    <p id="statNewest" class="text-sm md:text-base font-bold text-space-accent font-mono mt-1">---</p>
                 </div>
-                <div class="w-full">
-                    <label for="filterLocation" class="block text-[10px] text-cyber-cyan font-orbitron tracking-wider mb-1 md:mb-2">UBICACIÓN</label>
-                    <input type="text" id="filterLocation" placeholder="Ej. Ocean..." class="w-full bg-cyber-dark text-white border border-gray-700 p-3 md:p-2 font-mono text-sm focus:border-cyber-cyan transition-colors outline-none rounded-none">
+                <div class="space-panel p-3 text-center flex flex-col justify-center">
+                    <h3 class="text-space-textMuted text-[9px] md:text-xs font-orbitron tracking-widest uppercase mb-1">Network</h3>
+                    <p id="statNetwork" class="text-sm md:text-base font-bold text-green-400 font-mono mt-1">ONLINE</p>
                 </div>
-                <div class="w-full">
-                    <label for="filterType" class="block text-[10px] text-cyber-cyan font-orbitron tracking-wider mb-1 md:mb-2">FENÓMENO</label>
-                    <select id="filterType" class="w-full bg-cyber-dark text-white border border-gray-700 p-3 md:p-2 font-mono text-sm focus:border-cyber-cyan transition-colors outline-none appearance-none rounded-none cursor-pointer">
-                        <option value="">TODOS</option>
-                    </select>
+                <div class="space-panel p-3 text-center flex flex-col justify-center">
+                    <h3 class="text-space-textMuted text-[9px] md:text-xs font-orbitron tracking-widest uppercase mb-1">Clearance</h3>
+                    <p class="text-sm md:text-base font-bold text-red-400 font-mono mt-1">SECRET</p>
                 </div>
-            </div>
-        </section>
+            </section>
+
+            <section class="lg:col-span-9 space-panel p-4 md:p-6 flex flex-col justify-center">
+                <h3 class="text-space-accent font-orbitron tracking-widest text-xs mb-4 uppercase border-b border-space-border/50 pb-2">Data Stream Filters</h3>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                    <div class="w-full">
+                        <label for="filterText" class="block text-[9px] text-space-textMuted font-orbitron tracking-wider mb-1 uppercase">Keyword Search</label>
+                        <input type="text" id="filterText" placeholder="Query matrix..." class="w-full space-input p-2 font-mono text-sm rounded-sm">
+                    </div>
+                    <div class="w-full">
+                        <label for="filterDate" class="block text-[9px] text-space-textMuted font-orbitron tracking-wider mb-1 uppercase">Date (YYYY-MM-DD)</label>
+                        <input type="text" id="filterDate" placeholder="Temporal filter..." class="w-full space-input p-2 font-mono text-sm rounded-sm">
+                    </div>
+                    <div class="w-full">
+                        <label for="filterLocation" class="block text-[9px] text-space-textMuted font-orbitron tracking-wider mb-1 uppercase">Location</label>
+                        <input type="text" id="filterLocation" placeholder="Spatial coordinates..." class="w-full space-input p-2 font-mono text-sm rounded-sm">
+                    </div>
+                    <div class="w-full">
+                        <label for="filterType" class="block text-[9px] text-space-textMuted font-orbitron tracking-wider mb-1 uppercase">Phenomena Type</label>
+                        <select id="filterType" class="w-full space-input p-2 font-mono text-sm appearance-none rounded-sm cursor-pointer">
+                            <option value="">ALL CLASSIFICATIONS</option>
+                        </select>
+                    </div>
+                </div>
+            </section>
+        </div>
 
         <section class="flex-1">
-            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-end mb-4 border-b border-gray-800 pb-2 gap-2">
-                <div id="resultsCount" class="text-cyber-magenta font-mono text-xs md:text-sm tracking-widest"></div>
-                <div class="text-[10px] text-gray-500 font-orbitron">PAGE <span id="currentPageInd" class="text-cyber-cyan">1</span></div>
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-end mb-4 gap-2">
+                <div id="resultsCount" class="text-space-accent font-mono text-xs md:text-sm tracking-widest uppercase"></div>
+                <div class="text-[10px] text-space-textMuted font-orbitron">BLOCK <span id="currentPageInd" class="text-space-textMain">1</span></div>
             </div>
             
-            <div id="dataGrid" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+            <div id="dataGrid" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">
                 </div>
             
-            <div id="noResults" class="hidden text-center py-20 text-gray-500 font-orbitron text-lg md:text-xl px-4">
-                SIN RESULTADOS EN LA MATRIZ
+            <div id="noResults" class="hidden text-center py-24 space-panel rounded-sm">
+                <p class="font-orbitron text-space-textMuted text-lg md:text-xl uppercase tracking-widest">NO MATCHING RECORDS FOUND IN MAINFRAME</p>
             </div>
 
-            <div id="paginationControls" class="flex flex-wrap justify-center items-center gap-2 md:gap-4 mt-10 mb-8 w-full">
+            <div id="paginationControls" class="flex justify-center items-center gap-2 mt-8 mb-4 w-full">
                 </div>
         </section>
     </main>
 
-    <footer class="relative z-20 border-t border-cyber-cyan/20 bg-cyber-black py-8 mt-auto">
-        <div class="container mx-auto px-4 flex flex-col md:flex-row justify-between items-center gap-6 text-center md:text-left">
-            <div>
-                <h4 class="font-orbitron text-base md:text-lg text-white mb-1">DEVELOPED BY <a href="https://nezzed.com" target="_blank" rel="noopener noreferrer" class="text-cyber-cyan hover:text-cyber-magenta transition-colors">NEZZED.COM</a></h4>
-                <p class="text-[10px] md:text-xs font-mono text-gray-500">Frontend Cyberpunk Architect & Systems Developer.</p>
+    <footer class="relative z-20 border-t border-space-border/50 bg-space-base/90 py-6 mt-auto">
+        <div class="container mx-auto px-4 flex flex-col md:flex-row justify-between items-center gap-4 text-center md:text-left">
+            <div class="flex items-center gap-4">
+                 <img src="brand-nezzed.png" alt="Nezzed Logo" class="w-18 h-14 opacity-50 grayscale hover:grayscale-0 hover:opacity-100 transition-all">
+                <div>
+                    <h4 class="font-orbitron text-sm text-space-textMain tracking-wider">ENGINEERED BY <a href="https://nezzed.com" target="_blank" rel="noopener noreferrer" class="text-space-accent hover:text-white transition-colors">NEZZED</a></h4>
+                    <p class="text-[10px] font-mono text-space-textMuted uppercase">Aerospace & Defense UI Systems</p>
+                </div>
             </div>
             
             <div class="w-full md:w-auto">
-                <a href="https://paypal.me/nezzedsolutions" target="_blank" rel="noopener noreferrer" class="flex justify-center items-center gap-2 px-6 py-4 md:py-3 bg-cyber-dark text-cyber-magenta font-orbitron text-xs md:text-sm font-bold tracking-widest uppercase neon-border-magenta group w-full md:w-auto">
-                    <svg class="w-5 h-5 group-hover:scale-110 transition-transform flex-shrink-0" fill="currentColor" viewBox="0 0 24 24"><path d="M7.076 21.337H2.47a.641.641 0 0 1-.633-.74L4.944.901C5.026.382 5.474 0 5.998 0h7.46c2.57 0 4.578.543 5.69 1.81 1.01 1.15 1.304 2.42 1.012 4.287-.023.143-.047.288-.077.437-.983 5.05-4.349 6.797-8.647 6.797h-2.19c-.524 0-.968.382-1.05.9l-1.12 7.106zM20.526 8.523c-.144-.816-.48-1.425-1.02-1.87-.585-.484-1.488-.705-2.618-.705H9.68a.64.64 0 0 0-.633.541l-1.92 12.193a.642.642 0 0 0 .633.74h3.69l.71-4.502a.64.64 0 0 1 .632-.54h1.36c3.486 0 6.22-1.42 7.006-5.498.05-.262.096-.53.136-.81l.056-.34c.039-.235.074-.474.103-.72.033-.274.053-.55.053-.836z"/></svg>
-                    <span>Support the Mainframe</span>
+                <a href="https://paypal.me/nezzedsolutions" target="_blank" rel="noopener noreferrer" class="flex justify-center items-center gap-2 px-6 py-2 border border-space-textMuted/30 hover:border-space-accent text-space-textMuted hover:text-space-accent transition-all font-orbitron text-xs tracking-widest uppercase rounded-sm group">
+                    <svg class="w-4 h-4 group-hover:scale-110 transition-transform" fill="currentColor" viewBox="0 0 24 24"><path d="M7.076 21.337H2.47a.641.641 0 0 1-.633-.74L4.944.901C5.026.382 5.474 0 5.998 0h7.46c2.57 0 4.578.543 5.69 1.81 1.01 1.15 1.304 2.42 1.012 4.287-.023.143-.047.288-.077.437-.983 5.05-4.349 6.797-8.647 6.797h-2.19c-.524 0-.968.382-1.05.9l-1.12 7.106zM20.526 8.523c-.144-.816-.48-1.425-1.02-1.87-.585-.484-1.488-.705-2.618-.705H9.68a.64.64 0 0 0-.633.541l-1.92 12.193a.642.642 0 0 0 .633.74h3.69l.71-4.502a.64.64 0 0 1 .632-.54h1.36c3.486 0 6.22-1.42 7.006-5.498.05-.262.096-.53.136-.81l.056-.34c.039-.235.074-.474.103-.72.033-.274.053-.55.053-.836z"/></svg>
+                    <span>Fund the Project</span>
                 </a>
             </div>
         </div>
     </footer>
 
-    <div id="detailModal" class="fixed inset-0 z-[60] bg-black/95 backdrop-blur-md hidden flex items-center justify-center p-2 sm:p-4 pt-16 sm:pt-4">
-        <div class="bg-cyber-panel neon-border-cyan w-full max-w-5xl max-h-[90vh] sm:max-h-[95vh] flex flex-col relative rounded-sm shadow-2xl">
-            <button onclick="closeModal()" class="absolute -top-12 sm:top-4 right-0 sm:right-4 text-cyber-magenta sm:text-gray-500 hover:text-cyber-magenta transition-colors z-50 bg-black/50 sm:bg-transparent rounded p-2 sm:p-1 border border-cyber-magenta/30 sm:border-none">
-                <span class="hidden sm:inline-block"><svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg></span>
-                <span class="sm:hidden font-orbitron tracking-widest text-xs flex items-center gap-1">CERRAR <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg></span>
+    <div id="detailModal" class="fixed inset-0 z-[60] bg-space-base/95 backdrop-blur-md hidden flex items-center justify-center p-2 sm:p-6">
+        <div class="space-panel w-full max-w-5xl max-h-[95vh] flex flex-col relative rounded-sm shadow-2xl border-space-accent/50">
+            <button onclick="closeModal()" class="absolute top-2 right-2 sm:top-4 sm:right-4 text-space-textMuted hover:text-space-accent transition-colors z-50 p-2 border border-transparent hover:border-space-accent/30 rounded-sm">
+                <span class="hidden sm:inline-block"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M6 18L18 6M6 6l12 12"></path></svg></span>
+                <span class="sm:hidden font-orbitron tracking-widest text-xs flex items-center gap-1">CLOSE <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg></span>
             </button>
             
-            <div class="p-4 sm:p-6 border-b border-gray-800">
-                <h2 id="modalMainTitle" class="font-orbitron text-lg sm:text-2xl text-cyber-cyan tracking-widest uppercase pr-8 sm:pr-12 break-words leading-tight">EXTRACCIÓN DE DATOS</h2>
-                <p class="text-[10px] sm:text-xs font-mono text-gray-500 mt-2">DVIDS REF: <span id="modalId" class="text-cyber-magenta"></span></p>
+            <div class="p-4 sm:p-6 border-b border-space-border/50 bg-black/20">
+                <h2 id="modalMainTitle" class="font-orbitron font-bold text-lg sm:text-2xl text-space-textMain tracking-widest uppercase pr-12 break-words leading-tight">DATA EXTRACTION</h2>
+                <p class="text-[10px] sm:text-xs font-mono text-space-accent mt-2 uppercase">REF ID: <span id="modalId" class="text-space-textMain"></span></p>
             </div>
             
-            <div class="p-4 sm:p-6 overflow-y-auto custom-scrollbar flex-1 font-mono text-xs sm:text-sm">
+            <div class="p-4 sm:p-6 overflow-y-auto custom-scrollbar flex-1 font-mono text-xs sm:text-sm bg-black/10">
                 <div id="modalMediaViewer" class="w-full mb-6 sm:mb-8 empty:hidden"></div>
 
-                <h3 class="text-cyber-cyan font-orbitron tracking-widest mb-3 sm:mb-4 border-b border-gray-800 pb-2 text-sm sm:text-base">METADATOS DEL EVENTO</h3>
+                <h3 class="text-space-textMuted font-orbitron tracking-widest mb-3 sm:mb-4 border-b border-space-border/30 pb-2 text-xs sm:text-sm uppercase">Detailed Telemetry & Metadata</h3>
                 <div id="modalContent" class="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4"></div>
             </div>
         </div>
@@ -304,7 +309,6 @@
         let allData = [];
         let filteredData = [];
         
-        // Configuración de Paginación
         const ITEMS_PER_PAGE = 12;
         let currentPage = 1;
 
@@ -323,7 +327,6 @@
             setTimeout(() => app.classList.remove('opacity-0'), 100);
         };
 
-        // LÓGICA DE EVENTO GA4 AL ABRIR EXPEDIENTE
         const trackViewEvent = (title, id) => {
             if (typeof gtag !== 'undefined') {
                 gtag('event', 'view_uap_file', {
@@ -335,10 +338,10 @@
         };
 
         const fetchData = (isManual = false) => {
-            if(isManual) showLoader("REESTABLECIENDO ENLACE...");
+            if(isManual) showLoader("RE-ESTABLISHING UPLINK...");
             document.getElementById('statusAlert').classList.add('hidden');
             document.getElementById('statNetwork').innerText = "FETCHING...";
-            document.getElementById('statNetwork').className = "text-sm md:text-xl font-bold text-cyber-warning font-mono mt-1 md:mt-2 animate-pulse";
+            document.getElementById('statNetwork').className = "text-sm md:text-base font-bold text-yellow-400 font-mono mt-1 animate-pulse";
 
             Papa.parse(CSV_URL, {
                 download: true,
@@ -354,13 +357,13 @@
                     
                     if(allData.length > 0) {
                         document.getElementById('statNetwork').innerText = "ONLINE";
-                        document.getElementById('statNetwork').className = "text-sm md:text-xl font-bold text-green-400 font-mono mt-1 md:mt-2";
+                        document.getElementById('statNetwork').className = "text-sm md:text-base font-bold text-green-400 font-mono mt-1";
                         populateSelects();
                         updateStats();
                         currentPage = 1;
                         renderGrid();
                     } else {
-                        handleError("El archivo se leyó pero está vacío.");
+                        handleError("Data stream empty.");
                     }
                     hideLoader();
                 },
@@ -371,13 +374,13 @@
         const handleError = (msg) => {
             console.error("Fetch Error:", msg);
             document.getElementById('statusAlert').innerHTML = `
-                <strong>FALLO CRÍTICO DE CONEXIÓN</strong><br>
-                El servidor rechazó la lectura (Bloqueo CORS/Seguridad).<br>
-                <span class="text-[10px] md:text-xs text-gray-400 mt-2 block break-all">ERROR: ${msg}</span>
+                <strong>CRITICAL CONNECTION FAILURE</strong><br>
+                Server rejected data request (CORS/Security Block).<br>
+                <span class="text-[10px] md:text-xs text-red-300/70 mt-1 block break-all">ERR_CODE: ${msg}</span>
             `;
             document.getElementById('statusAlert').classList.remove('hidden');
-            document.getElementById('statNetwork').innerText = "BLOCKED";
-            document.getElementById('statNetwork').className = "text-sm md:text-xl font-bold text-red-500 font-mono mt-1 md:mt-2";
+            document.getElementById('statNetwork').innerText = "OFFLINE";
+            document.getElementById('statNetwork').className = "text-sm md:text-base font-bold text-red-500 font-mono mt-1";
             hideLoader();
         };
 
@@ -387,7 +390,7 @@
                 if(row['Type'] && row['Type'].trim() !== '') types.add(row['Type'].trim());
             });
             const selectType = document.getElementById('filterType');
-            selectType.innerHTML = '<option value="">TODOS</option>';
+            selectType.innerHTML = '<option value="">ALL CLASSIFICATIONS</option>';
             Array.from(types).sort().forEach(t => {
                 selectType.innerHTML += `<option value="${t.toLowerCase()}">${t.toUpperCase()}</option>`;
             });
@@ -400,20 +403,26 @@
                 const maxDate = new Date(Math.max(...validDates));
                 document.getElementById('statNewest').innerText = maxDate.toISOString().split('T')[0];
             } else {
-                document.getElementById('statNewest').innerText = "CLASIFICADA";
+                document.getElementById('statNewest').innerText = "CLASSIFIED";
             }
         };
 
+        // Miniaturas Estilo Radar/Planos NASA
         const generateCardThumbnail = (record) => {
             const videoId = record['DVIDS Video ID'];
             const link = record['PDF | Image Link'] || record['Modal Image'];
             
             if (videoId && videoId.trim() !== '') {
                 return `
-                    <div class="w-full h-32 md:h-40 bg-cyber-panel border border-gray-800 mb-4 flex flex-col items-center justify-center text-cyber-cyan group-hover:border-cyber-cyan transition-all relative overflow-hidden">
-                        <div class="absolute inset-0 opacity-20 pointer-events-none" style="background-image: linear-gradient(rgba(0, 243, 255, 0.4) 1px, transparent 1px), linear-gradient(90deg, rgba(0, 243, 255, 0.4) 1px, transparent 1px); background-size: 10px 10px;"></div>
-                        <svg class="w-8 h-8 mb-1 relative z-10 opacity-80 group-hover:opacity-100 group-hover:scale-110 transition-all" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                        <span class="text-[10px] font-orbitron tracking-widest relative z-10 text-cyber-cyan/70 group-hover:text-cyber-cyan">VIDEO ENCRIPTADO</span>
+                    <div class="w-full h-32 md:h-36 bg-[#020617] border border-space-border/50 mb-4 flex flex-col items-center justify-center text-space-accent group-hover:border-space-accent transition-all relative overflow-hidden rounded-sm">
+                        <div class="absolute inset-0 opacity-20 pointer-events-none flex items-center justify-center">
+                            <div class="w-24 h-24 rounded-full border border-space-accent/40"></div>
+                            <div class="absolute w-16 h-16 rounded-full border border-space-accent/30"></div>
+                            <div class="absolute w-full h-[1px] bg-space-accent/20"></div>
+                            <div class="absolute h-full w-[1px] bg-space-accent/20"></div>
+                        </div>
+                        <svg class="w-8 h-8 mb-1 relative z-10 opacity-70 group-hover:opacity-100 group-hover:scale-110 transition-all" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                        <span class="text-[9px] font-orbitron tracking-widest relative z-10 text-space-accent/70 group-hover:text-space-accent">ENCRYPTED VIDEO</span>
                     </div>`;
             }
             if (link && link.trim() !== '') {
@@ -421,16 +430,16 @@
                 const lowerUrl = url.toLowerCase();
                 if (lowerUrl.match(/\.(jpeg|jpg|gif|png|webp)$/)) {
                     return `
-                        <div class="w-full h-32 md:h-40 border border-gray-800 mb-4 group-hover:border-cyber-cyan transition-all overflow-hidden relative bg-black">
-                            <div class="absolute inset-0 bg-cyber-cyan/20 mix-blend-overlay z-10 group-hover:opacity-0 transition-opacity duration-300 pointer-events-none"></div>
-                            <img src="${url}" alt="Preview" loading="lazy" class="w-full h-full object-cover grayscale opacity-60 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-500 transform group-hover:scale-105">
+                        <div class="w-full h-32 md:h-36 border border-space-border/50 mb-4 group-hover:border-space-accent transition-all overflow-hidden relative bg-[#020617] rounded-sm">
+                            <div class="absolute inset-0 bg-space-base/40 mix-blend-overlay z-10 group-hover:opacity-0 transition-opacity duration-300 pointer-events-none"></div>
+                            <img src="${url}" alt="Preview" loading="lazy" class="w-full h-full object-cover grayscale opacity-70 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-500 transform group-hover:scale-105">
                         </div>`;
                 } else if (lowerUrl.endsWith('.pdf')) {
                     return `
-                        <div class="w-full h-32 md:h-40 bg-[#1a0f1c] border border-gray-800 mb-4 flex flex-col items-center justify-center text-cyber-magenta group-hover:border-cyber-magenta transition-all relative overflow-hidden">
-                            <div class="absolute inset-0 opacity-40 pointer-events-none" style="background: repeating-linear-gradient(to bottom, transparent, transparent 2px, rgba(0,0,0,0.8) 2px, rgba(0,0,0,0.8) 4px);"></div>
-                            <svg class="w-8 h-8 mb-1 relative z-10 opacity-80 group-hover:opacity-100 group-hover:-translate-y-1 transition-all" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
-                            <span class="text-[10px] font-orbitron tracking-widest relative z-10 text-cyber-magenta/70 group-hover:text-cyber-magenta">DOCUMENTO PDF</span>
+                        <div class="w-full h-32 md:h-36 bg-[#020617] border border-space-border/50 mb-4 flex flex-col items-center justify-center text-space-textMuted group-hover:border-space-textMain group-hover:text-space-textMain transition-all relative overflow-hidden rounded-sm">
+                            <div class="absolute inset-0 opacity-10 pointer-events-none" style="background-image: linear-gradient(rgba(248, 250, 252, 0.5) 1px, transparent 1px), linear-gradient(90deg, rgba(248, 250, 252, 0.5) 1px, transparent 1px); background-size: 10px 10px;"></div>
+                            <svg class="w-8 h-8 mb-1 relative z-10 opacity-70 group-hover:opacity-100 group-hover:-translate-y-1 transition-all" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                            <span class="text-[9px] font-orbitron tracking-widest relative z-10 text-space-textMuted/70 group-hover:text-space-textMain uppercase">Document Scan</span>
                         </div>`;
                 }
             }
@@ -447,7 +456,7 @@
                 grid.classList.add('hidden');
                 document.getElementById('paginationControls').classList.add('hidden');
                 noResults.classList.remove('hidden');
-                document.getElementById('resultsCount').innerText = "0 REGISTROS";
+                document.getElementById('resultsCount').innerText = "0 RECORDS";
                 document.getElementById('currentPageInd').innerText = "0";
                 return;
             }
@@ -460,47 +469,49 @@
             const endIndex = startIndex + ITEMS_PER_PAGE;
             const pageData = filteredData.slice(startIndex, endIndex);
 
-            document.getElementById('resultsCount').innerText = `MOSTRANDO ${startIndex + 1}-${Math.min(endIndex, filteredData.length)} DE ${filteredData.length} REGISTROS`;
+            document.getElementById('resultsCount').innerText = `DISPLAYING ${startIndex + 1}-${Math.min(endIndex, filteredData.length)} OF ${filteredData.length} RECORDS`;
             document.getElementById('currentPageInd').innerText = currentPage;
 
             pageData.forEach((row, idx) => {
                 const globalIndex = startIndex + idx; 
                 
-                const title = row['Title'] || 'REGISTRO SIN TÍTULO';
+                const title = row['Title'] || 'UNNAMED RECORD';
                 const date = row['Incident Date'] || row['Release Date'] || 'N/A';
                 const type = row['Type'] || 'UNKNOWN';
-                const location = row['Incident Location'] || 'UBICACIÓN CLASIFICADA';
+                const location = row['Incident Location'] || 'CLASSIFIED LOCATION';
                 const agency = row['Agency'] || 'DEPARTMENT OF WAR';
-                const desc = row['Description Blurb'] || 'No hay descripción disponible.';
+                const desc = row['Description Blurb'] || 'No additional data available in central frame.';
 
                 const thumbnailHtml = generateCardThumbnail(row);
                 const hasMedia = (row['DVIDS Video ID'] || row['PDF | Image Link'] || row['Modal Image']);
-                const mediaTag = hasMedia ? `<span class="bg-cyber-cyan/10 text-cyber-cyan px-2 py-1 text-[9px] font-bold rounded-sm border border-cyber-cyan/30 flex items-center gap-1"><svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg> <span class="hidden sm:inline">MEDIA</span></span>` : '';
+                const mediaTag = hasMedia ? `<span class="text-space-accent text-[9px] font-bold flex items-center gap-1 uppercase tracking-wider"><svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg> <span class="hidden sm:inline">ATTACHMENT</span></span>` : '';
 
                 const card = document.createElement('div');
-                card.className = "bg-cyber-dark p-4 md:p-6 neon-border-cyan cursor-pointer holographic-hover flex flex-col justify-between group relative overflow-hidden";
+                card.className = "space-panel space-panel-hover p-4 md:p-5 cursor-pointer flex flex-col justify-between group relative overflow-hidden";
                 card.onclick = () => openModal(globalIndex);
                 
                 card.innerHTML = `
                     <div class="relative z-10 flex-1 flex flex-col">
-                        <div class="flex justify-between items-start border-b border-gray-800 pb-3 mb-4 gap-2">
+                        <div class="flex justify-between items-start border-b border-space-border/50 pb-2 mb-3 gap-2">
                             <div class="flex flex-col">
-                                <span class="text-[9px] text-gray-600 font-orbitron uppercase">INCIDENT DATE</span>
-                                <span class="text-cyber-cyan font-mono text-xs md:text-sm">${date}</span>
+                                <span class="text-[8px] text-space-textMuted font-orbitron uppercase tracking-widest">Incident Date</span>
+                                <span class="text-space-textMain font-mono text-xs md:text-sm font-bold">${date}</span>
                             </div>
                             <div class="flex flex-col items-end gap-1 text-right">
-                                <span class="bg-cyber-magenta/20 text-cyber-magenta px-2 py-1 text-[9px] font-bold uppercase rounded-sm border border-cyber-magenta/30 line-clamp-1">${type}</span>
+                                <span class="text-[9px] font-mono text-space-textMuted uppercase border border-space-border/30 px-1 rounded-sm">${type}</span>
                                 ${mediaTag}
                             </div>
                         </div>
+                        
                         ${thumbnailHtml}
-                        <span class="text-[9px] text-gray-600 font-orbitron block mb-1 uppercase line-clamp-1">${location} // ${agency}</span>
-                        <h3 class="text-base sm:text-lg md:text-xl font-orbitron font-bold text-white mb-2 md:mb-3 group-hover:text-cyber-cyan transition-colors leading-tight line-clamp-2">${title}</h3>
-                        <p class="text-gray-400 text-xs md:text-sm font-mono line-clamp-3 leading-relaxed border-l-2 border-gray-700 pl-2 md:pl-3 flex-1">${desc}</p>
+                        
+                        <span class="text-[9px] text-space-accent font-mono block mb-1 uppercase line-clamp-1">${location} // ${agency}</span>
+                        <h3 class="text-sm sm:text-base md:text-lg font-orbitron font-bold text-space-textMain mb-2 group-hover:text-space-accent transition-colors leading-snug line-clamp-2">${title}</h3>
+                        <p class="text-space-textMuted text-xs md:text-sm font-mono line-clamp-3 leading-relaxed flex-1">${desc}</p>
                     </div>
-                    <div class="mt-4 pt-3 md:pt-4 border-t border-gray-800 flex justify-end relative z-10">
-                        <span class="text-[10px] md:text-[11px] text-cyber-cyan font-orbitron tracking-widest flex items-center gap-1 group-hover:animate-pulse">
-                            ABRIR EXPEDIENTE <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                    <div class="mt-4 pt-3 border-t border-space-border/30 flex justify-end relative z-10">
+                        <span class="text-[10px] text-space-accent font-orbitron tracking-widest flex items-center gap-1 group-hover:translate-x-1 transition-transform uppercase">
+                            Open File <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
                         </span>
                     </div>
                 `;
@@ -517,23 +528,23 @@
 
             if (totalPages <= 1) return;
 
-            const btnClass = "px-4 py-3 md:py-2 font-orbitron text-xs md:text-sm tracking-widest uppercase border transition-colors flex-1 sm:flex-none text-center";
+            const btnClass = "px-3 py-2 md:py-1 font-orbitron text-xs tracking-widest uppercase border transition-colors rounded-sm";
 
             const btnPrev = document.createElement('button');
-            btnPrev.className = `${btnClass} ${currentPage === 1 ? 'border-gray-800 text-gray-600 cursor-not-allowed' : 'border-cyber-cyan text-cyber-cyan hover:bg-cyber-cyan hover:text-black'}`;
-            btnPrev.innerText = '<< PREV';
+            btnPrev.className = `${btnClass} ${currentPage === 1 ? 'border-space-border/20 text-space-textMuted/50 cursor-not-allowed' : 'border-space-accent/50 text-space-accent hover:bg-space-accent hover:text-space-base'}`;
+            btnPrev.innerText = 'PREV';
             btnPrev.disabled = currentPage === 1;
             btnPrev.onclick = () => { if(currentPage > 1) { currentPage--; renderGrid(); window.scrollTo({top: document.getElementById('appContainer').offsetTop, behavior: 'smooth'}); } };
             container.appendChild(btnPrev);
 
             const pageInfo = document.createElement('span');
-            pageInfo.className = "font-mono text-white text-sm px-2 sm:px-4 order-first sm:order-none w-full sm:w-auto text-center mb-2 sm:mb-0";
-            pageInfo.innerText = `[ ${currentPage} / ${totalPages} ]`;
+            pageInfo.className = "font-mono text-space-textMuted text-xs px-4";
+            pageInfo.innerText = `${currentPage} / ${totalPages}`;
             container.appendChild(pageInfo);
 
             const btnNext = document.createElement('button');
-            btnNext.className = `${btnClass} ${currentPage === totalPages ? 'border-gray-800 text-gray-600 cursor-not-allowed' : 'border-cyber-cyan text-cyber-cyan hover:bg-cyber-cyan hover:text-black'}`;
-            btnNext.innerText = 'NEXT >>';
+            btnNext.className = `${btnClass} ${currentPage === totalPages ? 'border-space-border/20 text-space-textMuted/50 cursor-not-allowed' : 'border-space-accent/50 text-space-accent hover:bg-space-accent hover:text-space-base'}`;
+            btnNext.innerText = 'NEXT';
             btnNext.disabled = currentPage === totalPages;
             btnNext.onclick = () => { if(currentPage < totalPages) { currentPage++; renderGrid(); window.scrollTo({top: document.getElementById('appContainer').offsetTop, behavior: 'smooth'}); } };
             container.appendChild(btnNext);
@@ -570,7 +581,7 @@
             let html = '';
             if (record['DVIDS Video ID'] && record['DVIDS Video ID'].trim() !== '') {
                 const videoId = record['DVIDS Video ID'].trim();
-                html += `<div class="relative w-full aspect-video bg-black rounded border border-cyber-cyan overflow-hidden mb-4 shadow-[0_0_15px_rgba(0,243,255,0.2)]">
+                html += `<div class="relative w-full aspect-video bg-black rounded-sm border border-space-border overflow-hidden mb-6 shadow-lg">
                             <iframe src="https://www.dvidshub.net/video/embed/${videoId}" width="100%" height="100%" frameborder="0" allowtransparency allowfullscreen></iframe>
                         </div>`;
             }
@@ -580,16 +591,16 @@
                 const url = link.trim();
                 const lowerUrl = url.toLowerCase();
                 if (lowerUrl.endsWith('.pdf')) {
-                    html += `<div class="relative w-full h-[50vh] sm:h-[60vh] bg-cyber-black rounded border border-cyber-magenta overflow-hidden mb-4 flex flex-col">
-                                <div class="bg-gray-900 p-2 text-[10px] sm:text-xs font-mono text-center text-cyber-magenta border-b border-cyber-magenta">VISOR DE DOCUMENTOS CLASIFICADOS</div>
+                    html += `<div class="relative w-full h-[50vh] sm:h-[65vh] bg-space-base rounded-sm border border-space-border overflow-hidden mb-6 flex flex-col">
+                                <div class="bg-[#020617] p-2 text-[10px] sm:text-xs font-mono text-center text-space-textMuted border-b border-space-border/50 uppercase tracking-widest">Secure Document Viewer</div>
                                 <iframe src="${url}" class="w-full flex-1" type="application/pdf"></iframe>
-                                <div class="bg-gray-900 p-2 text-[10px] sm:text-xs text-center border-t border-gray-800">
-                                    <a href="${url}" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-white underline">Descargar / Abrir en pestaña nueva si es bloqueado</a>
+                                <div class="bg-[#020617] p-2 text-[10px] sm:text-xs text-center border-t border-space-border/50">
+                                    <a href="${url}" target="_blank" rel="noopener noreferrer" class="text-space-accent hover:text-white transition-colors">Download / Open externally if blocked</a>
                                 </div>
                             </div>`;
                 } else if (lowerUrl.match(/\.(jpeg|jpg|gif|png|webp)$/)) {
-                    html += `<div class="relative w-full max-h-[50vh] sm:max-h-[60vh] bg-black rounded border border-cyber-cyan overflow-hidden mb-4 flex justify-center items-center p-2 shadow-[0_0_15px_rgba(0,243,255,0.2)]">
-                                <img src="${url}" alt="UAP Visual Data" class="max-w-full max-h-full object-contain">
+                    html += `<div class="relative w-full max-h-[50vh] sm:max-h-[65vh] bg-black rounded-sm border border-space-border overflow-hidden mb-6 flex justify-center items-center p-2 shadow-lg">
+                                <img src="${url}" alt="UAP Visual Data" class="max-w-full max-h-full object-contain rounded-sm">
                             </div>`;
                 }
             }
@@ -599,11 +610,10 @@
         const openModal = (index) => {
             const record = filteredData[index];
             
-            // Disparar evento a Google Analytics (GA4)
-            trackViewEvent(record['Title'] || 'EXPEDIENTE SIN TITULO', record['DVIDS Video ID'] || record['Image VIRIN'] || 'UNKNOWN_ID');
+            trackViewEvent(record['Title'] || 'UNNAMED_RECORD', record['DVIDS Video ID'] || record['Image VIRIN'] || 'UNKNOWN_ID');
 
-            document.getElementById('modalMainTitle').innerText = record['Title'] || 'EXPEDIENTE CLASIFICADO';
-            document.getElementById('modalId').innerText = record['DVIDS Video ID'] || record['Image VIRIN'] || `REF-UNK-${Math.floor(Math.random()*9999)}`;
+            document.getElementById('modalMainTitle').innerText = record['Title'] || 'CLASSIFIED FILE';
+            document.getElementById('modalId').innerText = record['DVIDS Video ID'] || record['Image VIRIN'] || `REF-${Math.floor(Math.random()*99999)}`;
             document.getElementById('modalMediaViewer').innerHTML = buildMediaEmbed(record);
 
             const content = document.getElementById('modalContent');
@@ -611,17 +621,17 @@
 
             for (const [key, value] of Object.entries(record)) {
                 let displayValue = value ? value.trim() : '';
-                if(!displayValue) displayValue = '<span class="text-gray-600">[NULL/REDACTED]</span>';
-                else if (displayValue.startsWith('http')) displayValue = `<a href="${displayValue}" target="_blank" rel="noopener noreferrer" class="text-cyber-cyan hover:text-cyber-magenta underline break-all">Enlace Externo ↗</a>`;
+                if(!displayValue) displayValue = '<span class="text-space-textMuted/50">[DATA EXPUNGED]</span>';
+                else if (displayValue.startsWith('http')) displayValue = `<a href="${displayValue}" target="_blank" rel="noopener noreferrer" class="text-space-accent hover:text-white underline break-all">External Link</a>`;
 
                 const colSpan = (key === 'Description Blurb') ? 'md:col-span-2' : '';
                 content.innerHTML += `
-                    <div class="bg-black/40 p-3 sm:p-4 border-l-2 border-gray-700 hover:border-cyber-cyan hover:bg-cyber-cyan/5 transition-colors ${colSpan}">
-                        <div class="text-gray-400 text-[9px] sm:text-[10px] font-orbitron tracking-widest mb-1 uppercase">${key}</div>
-                        <div class="text-gray-200 text-xs sm:text-sm leading-relaxed">${displayValue}</div>
+                    <div class="bg-[#020617]/50 p-3 sm:p-4 border border-space-border/20 rounded-sm ${colSpan}">
+                        <div class="text-space-textMuted text-[9px] sm:text-[10px] font-orbitron tracking-widest mb-1 uppercase">${key}</div>
+                        <div class="text-space-textMain text-xs sm:text-sm font-mono leading-relaxed">${displayValue}</div>
                     </div>`;
             }
-            // Bloquear el scroll de la página de fondo en móviles
+            
             document.body.style.overflow = 'hidden';
             document.getElementById('detailModal').classList.remove('hidden');
         };
@@ -629,7 +639,6 @@
         const closeModal = () => {
             document.getElementById('detailModal').classList.add('hidden');
             document.getElementById('modalMediaViewer').innerHTML = ''; 
-            // Devolver el scroll a la página
             document.body.style.overflow = 'auto';
         };
 
